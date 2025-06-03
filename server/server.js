@@ -9,14 +9,31 @@ const WebSocket = require('ws');
 const dns = require('dns');
 const net = require('net');
 
+
+
+
 const app = express();
 const PORT = process.env.PORT || 8080;
+
 
 // 보안: 특정 도메인만 허용하도록 설정 (필요 시 수정)
 const corsOptions = {
   origin: '*', // 🚨 배포 시엔 ['https://yourdomain.com']처럼 제한하세요
   methods: ['GET']
 };
+
+app.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/about.html'));
+});
+
+app.get('/privacy', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/privacy.html'));
+});
+
+app.get('/contact', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/contact.html'));
+});
+
 app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -120,3 +137,4 @@ wss.on('connection', (ws, req) => {
 server.listen(PORT, () => {
   console.log(`✅ Server + WS running on port ${PORT}`);
 });
+

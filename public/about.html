@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="mainTitle">About - Realtime Server Time</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/i18next@21.6.14/i18next.min.js"></script>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-4 gap-4 bg-base-100 text-base-content">
+  
+  <!-- Toast Container -->
+  <div class="toast toast-end" id="toastContainer"></div>
+
+  <!-- Header -->
+  <div class="w-full max-w-xl text-center">
+    <h1 id="mainTitle" class="text-2xl font-bold mb-2 dark:text-gray-100">About</h1>
+    <p id="descriptionText" class="text-sm text-gray-500 dark:text-gray-300">
+      Information about this project
+    </p>
+  </div>
+
+  <!-- Language Select -->
+  <div class="w-full max-w-xl flex gap-2 items-center">
+    <label class="label-text w-40">🌐 Language</label>
+    <select id="langSelect" class="select select-bordered select-sm flex-1">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="ja">日本語</option>
+      <option value="zh">简体中文</option>
+      <option value="zh-TW">繁體中文</option>
+      <option value="es">Español</option>
+      <option value="hi">हिन्दी</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="it">Italiano</option>
+      <option value="tr">Türkçe</option>
+      <option value="id">Bahasa Indonesia</option>
+      <option value="pl">Polski</option>
+    </select>
+  </div>
+
+  <!-- Main Content -->
+  <div class="w-full max-w-xl mt-4 prose">
+    <p>This web app shows you the precise time of a server in real time. It's useful for measuring latency, debugging time sync, or simply satisfying curiosity.</p>
+    <p>Built using JavaScript, Express.js, and WebSocket. You can contribute on GitHub or suggest improvements via contact page.</p>
+  </div>
+
+  <!-- Navigation -->
+  <footer class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
+    <a id="linkHome" href="/" class="link link-hover">🏠 Home</a>
+    <a id="linkAbout" class="link link-hover">📘 About</a>
+    <a id="linkPrivacy" href="/privacy.html" class="link link-hover">🔐 Privacy Policy</a>
+    <a id="linkContact" href="/contact.html" class="link link-hover">📨 Contact</a>
+  </footer>
+
+  <!-- Main JS -->
+  <script type="module">
+    import { setupI18n } from './main.js';
+    setupI18n("index", (t) => {
+      document.title = t('linkAbout') + " - Realtime Server Time";
+    });
+  </script>
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

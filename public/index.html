@@ -1,48 +1,49 @@
-<!-- public/index.html-->
 <!DOCTYPE html>
-
-<html lang="ko" data-theme="light">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Realtime Server Time</title>
-
+  <title id="mainTitle">Realtime Server Time</title>
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.css" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- 다국어 + 시간대용 -->
   <script src="https://unpkg.com/i18next@21.6.14/i18next.min.js"></script>
-  <script src="https://unpkg.com/moment@2.29.4/min/moment.min.js"></script>
-  <script src="https://unpkg.com/moment-timezone@0.5.43/builds/moment-timezone-with-data.min.js"></script>
-
-  <style>
-    .soon-effect {
-      animation: blink 1s step-start 0s infinite;
-      color: #dc2626;
-      font-weight: bold;
-    }
-    @keyframes blink {
-      50% { opacity: 0.4; }
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.43/builds/moment-timezone-with-data.min.js"></script>
 </head>
-
 <body class="min-h-screen flex flex-col items-center justify-start p-4 gap-4 bg-base-100 text-base-content">
-
+  
   <!-- Toast Container -->
   <div class="toast toast-end" id="toastContainer"></div>
 
-  <!-- 헤더 -->
+  <!-- Header -->
   <div class="w-full max-w-xl text-center">
-    <h1 id="mainTitle" class="text-2xl font-bold mb-2">실시간 서버 시간</h1>
-    <p id="descriptionText" class="text-sm text-gray-500 dark:text-gray-300">정확한 서버 시간을 측정하고 동기화합니다</p>
+    <h1 id="mainTitle" class="text-2xl font-bold mb-2 dark:text-gray-100">Realtime Server Time</h1>
+    <p id="descriptionText" class="text-sm text-gray-500 dark:text-gray-300">
+      Measure exact server time and sync with client
+    </p>
   </div>
 
-  <!-- 언어 및 테마 선택 -->
-  <div class="w-full max-w-xl flex justify-between items-center">
-    <label class="label gap-2">
-      <span class="label-text">🌐 Language</span>
-      <select id="langSelect" class="select select-bordered select-sm">
+  <!-- Controls -->
+  <div class="w-full max-w-xl flex flex-col gap-4">
+    <div class="flex gap-2 items-center">
+      <label id="urlLabel" class="label-text w-44">Enter Target Server URL</label>
+      <input id="urlInput" class="input input-bordered input-sm flex-1" placeholder="https://example.com" />
+    </div>
+    <div class="flex gap-2 items-center">
+      <label id="timezoneLabel" class="label-text w-44">Select Timezone</label>
+      <select id="timezoneSelect" class="select select-bordered select-sm flex-1"></select>
+    </div>
+    <div class="flex gap-2 items-center">
+      <label id="debugToggleLabel" class="label-text w-44">Show Debug Info</label>
+      <input id="debugToggle" type="checkbox" class="toggle toggle-sm" />
+    </div>
+    <div class="flex gap-2 items-center">
+      <label id="themeLabel" class="label-text w-44">🌙 Dark Mode</label>
+      <input id="themeToggle" type="checkbox" class="toggle toggle-sm" />
+    </div>
+    <div class="flex gap-2 items-center">
+      <label class="label-text w-44">🌐 Language</label>
+      <select id="langSelect" class="select select-bordered select-sm flex-1">
         <option value="ko">한국어</option>
         <option value="en">English</option>
         <option value="ja">日本語</option>
@@ -59,62 +60,45 @@
         <option value="id">Bahasa Indonesia</option>
         <option value="pl">Polski</option>
       </select>
-    </label>
-    <label class="cursor-pointer label gap-2">
-      <span id="themeLabel" class="label-text">🌙 다크모드</span>
-      <input type="checkbox" id="themeToggle" class="toggle toggle-sm" />
-    </label>
-  </div>
-
-  <!-- URL 입력 -->
-  <div class="w-full max-w-xl">
-    <label class="form-control w-full">
-      <div class="label">
-        <span id="urlLabel" class="label-text">타겟 서버 URL 입력</span>
-      </div>
-      <input id="urlInput" type="text" placeholder="https://example.com" class="input input-bordered w-full" />
-    </label>
-    <button id="fetchTimeBtn" class="btn btn-primary mt-2 w-full">서버 시간 가져오기</button>
-  </div>
-
-  <!-- 시간대 선택 -->
-  <div class="w-full max-w-xl">
-    <label class="form-control w-full">
-      <div class="label">
-        <span id="timezoneLabel" class="label-text">시간대 선택</span>
-      </div>
-      <select id="timezoneSelect" class="select select-bordered w-full"></select>
-    </label>
-  </div>
-
-  <!-- 시계 카드 -->
-  <div class="w-full max-w-xl bg-base-100 p-4 rounded-box text-center border border-base-300">
-    <div class="text-lg font-medium" id="statusText">⏳ URL을 선택해주세요</div>
-    <div id="serverTime" class="text-3xl font-mono mt-1">--:--:--.---</div>
-  </div>
-
-  <!-- 디버그 정보 -->
-  <div class="w-full max-w-xl flex flex-col gap-2 mt-4">
-    <label class="cursor-pointer label justify-start gap-2">
-      <input id="debugToggle" type="checkbox" class="toggle toggle-sm" />
-      <span id="debugToggleLabel" class="label-text text-sm">정밀 정보 보기</span>
-    </label>
-    <div id="debugInfo" class="text-xs mt-2 p-3 bg-base-100 rounded-box hidden border border-base-300">
-      <div><strong>Offset:</strong> <span id="offsetDisplay">--</span> ms</div>
-      <div><strong>Ping:</strong> <span id="pingDisplay">--</span> ms</div>
-      <div><strong>Date Header:</strong> <span id="dateHeader">--</span></div>
-      <div><strong>URL:</strong> <span id="connectedUrl">--</span></div>
     </div>
+    <button id="fetchTimeBtn" class="btn btn-primary btn-sm w-full">
+      Fetch Server Time
+    </button>
   </div>
-  <!-- 저작권 -->
-  <footer class="w-full text-center p-4 text-sm text-gray-500 border-t bg-base-200">
-  © 2025 YourSiteName. All rights reserved.
+
+  <!-- Time Display -->
+  <div class="w-full max-w-xl mt-4 text-center">
+    <h2 class="text-lg mb-1" id="dateHeader">--</h2>
+    <div id="serverTime" class="text-4xl font-mono font-bold">--:--:--.---</div>
+    <div id="connectedUrl" class="text-xs mt-2 text-gray-500">--</div>
+    <div id="statusText" class="text-sm mt-1">⏳ Please select a URL</div>
+  </div>
+
+  <!-- Debug Info -->
+  <div id="debugInfo" class="w-full max-w-xl hidden mt-4 text-sm text-left bg-base-200 p-3 rounded">
+    <div>Offset: <span id="offsetDisplay">--</span> ms</div>
+    <div>Ping: <span id="pingDisplay">--</span> ms</div>
+  </div>
+
+  <!-- Navigation Links -->
+  <footer class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
+    <a id="linkHome" class="link link-hover">🏠 Home</a>
+    <a id="linkAbout" href="/about.html" class="link link-hover">📘 About</a>
+    <a id="linkPrivacy" href="/privacy.html" class="link link-hover">🔐 Privacy Policy</a>
+    <a id="linkContact" href="/contact.html" class="link link-hover">📨 Contact</a>
   </footer>
-  <!-- 사운드 -->
-  
+
+  <!-- Audio -->
+  <audio id="chimeSmall" src="sound.mp3" preload="auto"></audio>
   <audio id="chimeExact" src="sound.mp3" preload="auto"></audio>
 
-  <!-- 메인 JS -->
-  <script src="main.js"></script>
+  <!-- Main JS -->
+  <script type="module">
+    import { setupI18n } from './main.js';
+    setupI18n("index", (t) => {
+      document.title = t('title') + " - Realtime Server Time";
+    });
+  </script>
+  <script type="module" src="/main.js"></script>
 </body>
 </html>

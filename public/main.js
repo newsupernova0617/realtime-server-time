@@ -19,22 +19,263 @@ const urlLabel = document.getElementById('urlLabel');
 const timezoneLabel = document.getElementById('timezoneLabel');
 const descriptionText = document.getElementById('descriptionText');
 
-const resources = {
-  en: { translation: { title: "Realtime Server Time", description: "Measure exact server time and sync with client", fetchBtn: "Fetch Server Time", timezoneLabel: "Select Timezone", urlLabel: "Enter Target Server URL", debugLabel: "Show Debug Info", themeDark: "🌙 Dark Mode", themeLight: "☀️ Light Mode", initialMessage: "⏳ Please select a URL" }},
-  ko: { translation: { title: "실시간 서버 시간", description: "정확한 서버 시간을 측정하고 동기화합니다", fetchBtn: "서버 시간 가져오기", timezoneLabel: "시간대 선택", urlLabel: "타겟 서버 URL 입력", debugLabel: "정밀 정보 보기", themeDark: "🌙 다크모드", themeLight: "☀️ 라이트모드", initialMessage: "⏳ URL을 선택해주세요" }},
-  ja: { translation: { title: "リアルタイムサーバー時間", description: "正確なサーバー時間を測定して同期します", fetchBtn: "サーバー時間を取得", timezoneLabel: "タイムゾーンを選択", urlLabel: "ターゲットURLを入力", debugLabel: "詳細情報を表示", themeDark: "🌙 ダークモード", themeLight: "☀️ ライトモード", initialMessage: "⏳ URLを選択してください" }},
-  zh: { translation: { title: "实时服务器时间", description: "测量准确的服务器时间并同步", fetchBtn: "获取服务器时间", timezoneLabel: "选择时区", urlLabel: "输入目标服务器 URL", debugLabel: "显示调试信息", themeDark: "🌙 黑暗模式", themeLight: "☀️ 亮色模式", initialMessage: "⏳ 请选择一个 URL" }},
-  'zh-TW': { translation: { title: "即時伺服器時間", description: "測量精確的伺服器時間並同步", fetchBtn: "取得伺服器時間", timezoneLabel: "選擇時區", urlLabel: "輸入目標伺服器 URL", debugLabel: "顯示詳細資訊", themeDark: "🌙 暗色模式", themeLight: "☀️ 亮色模式", initialMessage: "⏳ 請選擇 URL" }},
-  es: { translation: { title: "Hora del servidor en tiempo real", description: "Mide la hora exacta del servidor y sincroniza con el cliente", fetchBtn: "Obtener hora del servidor", timezoneLabel: "Seleccionar zona horaria", urlLabel: "Ingresar URL del servidor objetivo", debugLabel: "Mostrar información de depuración", themeDark: "🌙 Modo oscuro", themeLight: "☀️ Modo claro", initialMessage: "⏳ Por favor selecciona una URL" }},
-  hi: { translation: { title: "रीयलटाइम सर्वर समय", description: "सटीक सर्वर समय मापें और क्लाइंट से सिंक करें", fetchBtn: "सर्वर समय प्राप्त करें", timezoneLabel: "समय क्षेत्र चुनें", urlLabel: "लक्ष्य सर्वर URL दर्ज करें", debugLabel: "डिबग जानकारी दिखाएँ", themeDark: "🌙 डार्क मोड", themeLight: "☀️ लाइट मोड", initialMessage: "⏳ कृपया एक URL चुनें" }},
-  pt: { translation: { title: "Hora do Servidor em Tempo Real", description: "Meça a hora exata do servidor e sincronize com o cliente", fetchBtn: "Buscar Hora do Servidor", timezoneLabel: "Selecionar Fuso Horário", urlLabel: "Insira o URL do Servidor Alvo", debugLabel: "Mostrar Informações de Depuração", themeDark: "🌙 Modo Escuro", themeLight: "☀️ Modo Claro", initialMessage: "⏳ Selecione uma URL" }},
-  ru: { translation: { title: "Реальное серверное время", description: "Измерьте точное время сервера и синхронизируйте с клиентом", fetchBtn: "Получить время сервера", timezoneLabel: "Выберите часовой пояс", urlLabel: "Введите URL целевого сервера", debugLabel: "Показать отладочную информацию", themeDark: "🌙 Темный режим", themeLight: "☀️ Светлый режим", initialMessage: "⏳ Пожалуйста, выберите URL" }},
-  fr: { translation: { title: "Heure du serveur en temps réel", description: "Mesurez l'heure exacte du serveur et synchronisez avec le client", fetchBtn: "Obtenir l'heure du serveur", timezoneLabel: "Sélectionner le fuseau horaire", urlLabel: "Entrer l'URL du serveur cible", debugLabel: "Afficher les infos de débogage", themeDark: "🌙 Mode sombre", themeLight: "☀️ Mode clair", initialMessage: "⏳ Veuillez sélectionner une URL" }},
-  de: { translation: { title: "Echtzeit-Serverzeit", description: "Messen Sie die genaue Serverzeit und synchronisieren Sie mit dem Client", fetchBtn: "Serverzeit abrufen", timezoneLabel: "Zeitzone auswählen", urlLabel: "Zielserver-URL eingeben", debugLabel: "Debug-Informationen anzeigen", themeDark: "🌙 Dunkelmodus", themeLight: "☀️ Hellmodus", initialMessage: "⏳ Bitte wählen Sie eine URL" }},
-  it: { translation: { title: "Ora del server in tempo reale", description: "Misura l'ora esatta del server e sincronizza con il client", fetchBtn: "Ottieni ora del server", timezoneLabel: "Seleziona fuso orario", urlLabel: "Inserisci l'URL del server di destinazione", debugLabel: "Mostra informazioni di debug", themeDark: "🌙 Modalità scura", themeLight: "☀️ Modalità chiara", initialMessage: "⏳ Seleziona un URL" }},
-  tr: { translation: { title: "Gerçek Zamanlı Sunucu Saati", description: "Sunucu saatini ölçün ve istemciyle senkronize edin", fetchBtn: "Sunucu Saatini Al", timezoneLabel: "Zaman Dilimi Seç", urlLabel: "Hedef Sunucu URL'sini Girin", debugLabel: "Hata Ayıklama Bilgilerini Göster", themeDark: "🌙 Karanlık Mod", themeLight: "☀️ Açık Mod", initialMessage: "⏳ Lütfen bir URL seçin" }},
-  id: { translation: { title: "Waktu Server Realtime", description: "Ukur waktu server secara akurat dan sinkronkan dengan klien", fetchBtn: "Ambil Waktu Server", timezoneLabel: "Pilih Zona Waktu", urlLabel: "Masukkan URL Server Tujuan", debugLabel: "Tampilkan Info Debug", themeDark: "🌙 Mode Gelap", themeLight: "☀️ Mode Terang", initialMessage: "⏳ Silakan pilih URL" }},
-  pl: { translation: { title: "Czas serwera w czasie rzeczywistym", description: "Zmierz dokładny czas serwera i zsynchronizuj z klientem", fetchBtn: "Pobierz czas serwera", timezoneLabel: "Wybierz strefę czasową", urlLabel: "Wprowadź docelowy URL serwera", debugLabel: "Pokaż informacje debugowania", themeDark: "🌙 Tryb ciemny", themeLight: "☀️ Tryb jasny", initialMessage: "⏳ Proszę wybrać URL" }},
+
+export const resources = {
+  en: {
+    translation: {index:{
+      title: "Realtime Server Time",
+      description: "Measure exact server time and sync with client",
+      fetchBtn: "Fetch Server Time",
+      timezoneLabel: "Select Timezone",
+      urlLabel: "Enter Target Server URL",
+      debugLabel: "Show Debug Info",
+      themeDark: "🌙 Dark Mode",
+      themeLight: "☀️ Light Mode",
+      initialMessage: "⏳ Please select a URL",
+      linkHome: "Home",
+      linkAbout: "About",
+      linkPrivacy: "Privacy Policy",
+      linkContact: "Contact"
+    }}
+  },
+  ko: {
+    translation: {index:{
+      title: "실시간 서버 시간",
+      description: "정확한 서버 시간을 측정하고 동기화합니다",
+      fetchBtn: "서버 시간 가져오기",
+      timezoneLabel: "시간대 선택",
+      urlLabel: "타겟 서버 URL 입력",
+      debugLabel: "정밀 정보 보기",
+      themeDark: "🌙 다크모드",
+      themeLight: "☀️ 라이트모드",
+      initialMessage: "⏳ URL을 선택해주세요",
+      linkHome: "홈",
+      linkAbout: "소개",
+      linkPrivacy: "개인정보처리방침",
+      linkContact: "문의하기"
+    }}
+  },
+  ja: {
+    translation: {index:{
+      title: "リアルタイムサーバー時間",
+      description: "正確なサーバー時間を測定して同期します",
+      fetchBtn: "サーバー時間を取得",
+      timezoneLabel: "タイムゾーンを選択",
+      urlLabel: "ターゲットURLを入力",
+      debugLabel: "詳細情報を表示",
+      themeDark: "🌙 ダークモード",
+      themeLight: "☀️ ライトモード",
+      initialMessage: "⏳ URLを選択してください",
+      linkHome: "ホーム",
+      linkAbout: "紹介",
+      linkPrivacy: "プライバシーポリシー",
+      linkContact: "お問い合わせ"
+    }}
+  },
+  zh: {
+    translation: {index:{
+      title: "实时服务器时间",
+      description: "测量准确的服务器时间并同步",
+      fetchBtn: "获取服务器时间",
+      timezoneLabel: "选择时区",
+      urlLabel: "输入目标服务器 URL",
+      debugLabel: "显示调试信息",
+      themeDark: "🌙 黑暗模式",
+      themeLight: "☀️ 亮色模式",
+      initialMessage: "⏳ 请选择一个 URL",
+      linkHome: "首页",
+      linkAbout: "关于",
+      linkPrivacy: "隐私政策",
+      linkContact: "联系"
+    }}
+  },
+  'zh-TW': {index:{
+    translation: {
+      title: "即時伺服器時間",
+      description: "測量精確的伺服器時間並同步",
+      fetchBtn: "取得伺服器時間",
+      timezoneLabel: "選擇時區",
+      urlLabel: "輸入目標伺服器 URL",
+      debugLabel: "顯示詳細資訊",
+      themeDark: "🌙 暗色模式",
+      themeLight: "☀️ 亮色模式",
+      initialMessage: "⏳ 請選擇 URL",
+      linkHome: "首頁",
+      linkAbout: "關於我們",
+      linkPrivacy: "隱私權政策",
+      linkContact: "聯絡我們"
+    }}
+  },
+  es: {
+    translation: {index:{
+      title: "Hora del servidor en tiempo real",
+      description: "Mide la hora exacta del servidor y sincroniza con el cliente",
+      fetchBtn: "Obtener hora del servidor",
+      timezoneLabel: "Seleccionar zona horaria",
+      urlLabel: "Ingresar URL del servidor objetivo",
+      debugLabel: "Mostrar información de depuración",
+      themeDark: "🌙 Modo oscuro",
+      themeLight: "☀️ Modo claro",
+      initialMessage: "⏳ Por favor selecciona una URL",
+      linkHome: "Inicio",
+      linkAbout: "Acerca de",
+      linkPrivacy: "Política de Privacidad",
+      linkContact: "Contacto"
+    }}
+  },
+  hi: {
+    translation: {index:{
+      title: "रीयलटाइम सर्वर समय",
+      description: "सटीक सर्वर समय मापें और क्लाइंट से सिंक करें",
+      fetchBtn: "सर्वर समय प्राप्त करें",
+      timezoneLabel: "समय क्षेत्र चुनें",
+      urlLabel: "लक्ष्य सर्वर URL दर्ज करें",
+      debugLabel: "डिबग जानकारी दिखाएँ",
+      themeDark: "🌙 डार्क मोड",
+      themeLight: "☀️ लाइट मोड",
+      initialMessage: "⏳ कृपया एक URL चुनें",
+      linkHome: "होम",
+      linkAbout: "परिचय",
+      linkPrivacy: "गोपनीयता नीति",
+      linkContact: "संपर्क करें"
+    }}
+  },
+  pt: {
+    translation: {index:{
+      title: "Hora do Servidor em Tempo Real",
+      description: "Meça a hora exata do servidor e sincronize com o cliente",
+      fetchBtn: "Buscar Hora do Servidor",
+      timezoneLabel: "Selecionar Fuso Horário",
+      urlLabel: "Insira o URL do Servidor Alvo",
+      debugLabel: "Mostrar Informações de Depuração",
+      themeDark: "🌙 Modo Escuro",
+      themeLight: "☀️ Modo Claro",
+      initialMessage: "⏳ Selecione uma URL",
+      linkHome: "Início",
+      linkAbout: "Sobre",
+      linkPrivacy: "Política de Privacidade",
+      linkContact: "Contato"
+    }}
+  },
+  ru: {
+    translation: {index:{
+      title: "Реальное серверное время",
+      description: "Измерьте точное время сервера и синхронизируйте с клиентом",
+      fetchBtn: "Получить время сервера",
+      timezoneLabel: "Выберите часовой пояс",
+      urlLabel: "Введите URL целевого сервера",
+      debugLabel: "Показать отладочную информацию",
+      themeDark: "🌙 Темный режим",
+      themeLight: "☀️ Светлый режим",
+      initialMessage: "⏳ Пожалуйста, выберите URL",
+      linkHome: "Главная",
+      linkAbout: "О нас",
+      linkPrivacy: "Политика конфиденциальности",
+      linkContact: "Контакты"
+    }}
+  },
+  fr: {
+    translation: {index:{
+      title: "Heure du serveur en temps réel",
+      description: "Mesurez l'heure exacte du serveur et synchronisez avec le client",
+      fetchBtn: "Obtenir l'heure du serveur",
+      timezoneLabel: "Sélectionner le fuseau horaire",
+      urlLabel: "Entrer l'URL du serveur cible",
+      debugLabel: "Afficher les infos de débogage",
+      themeDark: "🌙 Mode sombre",
+      themeLight: "☀️ Mode clair",
+      initialMessage: "⏳ Veuillez sélectionner une URL",
+      linkHome: "Accueil",
+      linkAbout: "À propos",
+      linkPrivacy: "Politique de confidentialité",
+      linkContact: "Contact"
+    }}
+  },
+  de: {
+    translation: {index:{
+      title: "Echtzeit-Serverzeit",
+      description: "Messen Sie die genaue Serverzeit und synchronisieren Sie mit dem Client",
+      fetchBtn: "Serverzeit abrufen",
+      timezoneLabel: "Zeitzone auswählen",
+      urlLabel: "Zielserver-URL eingeben",
+      debugLabel: "Debug-Informationen anzeigen",
+      themeDark: "🌙 Dunkelmodus",
+      themeLight: "☀️ Hellmodus",
+      initialMessage: "⏳ Bitte wählen Sie eine URL",
+      linkHome: "Startseite",
+      linkAbout: "Über uns",
+      linkPrivacy: "Datenschutz",
+      linkContact: "Kontakt"
+    }}
+  },
+  it: {
+    translation: {index:{
+      title: "Ora del server in tempo reale",
+      description: "Misura l'ora esatta del server e sincronizza con il client",
+      fetchBtn: "Ottieni ora del server",
+      timezoneLabel: "Seleziona fuso orario",
+      urlLabel: "Inserisci l'URL del server di destinazione",
+      debugLabel: "Mostra informazioni di debug",
+      themeDark: "🌙 Modalità scura",
+      themeLight: "☀️ Modalità chiara",
+      initialMessage: "⏳ Seleziona un URL",
+      linkHome: "Home",
+      linkAbout: "Chi siamo",
+      linkPrivacy: "Informativa sulla privacy",
+      linkContact: "Contatti"
+    }}
+  },
+  tr: {
+    translation: {index:{
+      title: "Gerçek Zamanlı Sunucu Saati",
+      description: "Sunucu saatini ölçün ve istemciyle senkronize edin",
+      fetchBtn: "Sunucu Saatini Al",
+      timezoneLabel: "Zaman Dilimi Seç",
+      urlLabel: "Hedef Sunucu URL'sini Girin",
+      debugLabel: "Hata Ayıklama Bilgilerini Göster",
+      themeDark: "🌙 Karanlık Mod",
+      themeLight: "☀️ Açık Mod",
+      initialMessage: "⏳ Lütfen bir URL seçin",
+      linkHome: "Ana Sayfa",
+      linkAbout: "Hakkımızda",
+      linkPrivacy: "Gizlilik Politikası",
+      linkContact: "İletişim"
+    }}
+  },
+  id: {
+    translation: {index:{
+      title: "Waktu Server Realtime",
+      description: "Ukur waktu server secara akurat dan sinkronkan dengan klien",
+      fetchBtn: "Ambil Waktu Server",
+      timezoneLabel: "Pilih Zona Waktu",
+      urlLabel: "Masukkan URL Server Tujuan",
+      debugLabel: "Tampilkan Info Debug",
+      themeDark: "🌙 Mode Gelap",
+      themeLight: "☀️ Mode Terang",
+      initialMessage: "⏳ Silakan pilih URL",
+      linkHome: "Beranda",
+      linkAbout: "Tentang",
+      linkPrivacy: "Kebijakan Privasi",
+      linkContact: "Kontak"
+    }}
+  },
+  pl: {
+    translation: {index:{
+      title: "Czas serwera w czasie rzeczywistym",
+      description: "Zmierz dokładny czas serwera i zsynchronizuj z klientem",
+      fetchBtn: "Pobierz czas serwera",
+      timezoneLabel: "Wybierz strefę czasową",
+      urlLabel: "Wprowadź docelowy URL serwera",
+      debugLabel: "Pokaż informacje debugowania",
+      themeDark: "🌙 Tryb ciemny",
+      themeLight: "☀️ Tryb jasny",
+      initialMessage: "⏳ Proszę wybrać URL",
+      linkHome: "Strona główna",
+      linkAbout: "O nas",
+      linkPrivacy: "Polityka prywatności",
+      linkContact: "Kontakt"
+    }}
+  }
 };
 
 const timezones = [
@@ -183,27 +424,38 @@ const timezones = [
     }
   }
 ];
+export function setupI18n(pageKey, applyTranslations) {
+  const selector = document.getElementById("langSelect");
+  const savedLang = localStorage.getItem("lang") || (navigator.language || "en").split("-")[0];
 
+  if (selector) {
+    selector.value = savedLang;
+    selector.addEventListener("change", () => {
+      localStorage.setItem("lang", selector.value);
+      location.reload();
+    });
+  }
+
+  i18next.init({
+    lng: savedLang,
+    fallbackLng: "en",
+    resources,
+  }, () => {
+    document.documentElement.lang = i18next.language;
+    const t = (key) => i18next.t(`${pageKey}.${key}`);
+    if (typeof applyTranslations === "function") {
+      applyTranslations(t);
+    }
+  });
+}
 const browserLangRaw = navigator.language || navigator.userLanguage; // ex: 'ko-KR'
 const browserLang = browserLangRaw.split('-')[0]; // 'ko'
 const supportedLangs = Object.keys(resources);
 const defaultLang = supportedLangs.includes(browserLang) ? browserLang : 'en';
 
-// i18next 초기화
-i18next.init({ lng: defaultLang, fallbackLng: 'en', debug: false, resources }, () => {
-  updateText();
-  renderTimezoneOptions();
-  setUserTimezoneDefault();
-  langSelect.value = defaultLang; // 언어 선택창도 동기화
-});
 
-// 언어 변경 이벤트
-langSelect.addEventListener('change', (e) => {
-  i18next.changeLanguage(e.target.value, () => {
-    updateText();
-    renderTimezoneOptions();
-  });
-});
+
+
 
 // 상태 변수
 let offset = 0;
@@ -214,8 +466,12 @@ let syncInterval = null;
 let lastBeepSec = null;
 let lastExactPlayedSec = null;
 
+function updateHtmlLang() {
+  document.documentElement.setAttribute("lang", i18next.language);
+}
 // 번역된 텍스트 갱신
 function updateText() {
+  updateHtmlLang(); // ✅ 여기 추가
   mainTitle.textContent = i18next.t('title');
   descriptionText.textContent = i18next.t('description');
   fetchTimeBtn.textContent = i18next.t('fetchBtn');
@@ -224,6 +480,10 @@ function updateText() {
   debugToggleLabel.textContent = i18next.t('debugLabel');
   themeLabel.textContent = themeToggle.checked ? i18next.t('themeLight') : i18next.t('themeDark');
   statusText.textContent = i18next.t('initialMessage');
+  document.getElementById('linkHome').textContent = `🏠 ${i18next.t('linkHome')}`;
+  document.getElementById('linkAbout').textContent = `📘 ${i18next.t('linkAbout')}`;
+  document.getElementById('linkPrivacy').textContent = `🔐 ${i18next.t('linkPrivacy')}`;
+  document.getElementById('linkContact').textContent = `📨 ${i18next.t('linkContact')}`;
 }
 
 // 테마 변경
